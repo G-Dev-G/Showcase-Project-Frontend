@@ -1,0 +1,55 @@
+<div style="margin: 15px;">
+  <div class="d-flex justify-content-between">
+    <div>
+      <select #categorySelect class="custom-select" style="margin-left: 25px; width: 150px"
+        (change)="filterAndSortOnChange()">
+        <option selected disabled value="">Category</option>
+        <option value="">All</option>
+        <option value="computers">Computers</option>
+        <option value="tablets">Tablets</option>
+        <option value="phones">Phones</option>
+        <option value="accessories">Accessories</option>
+      </select>
+
+      <label class="ml-5 mr-2" for="sortby">Sort by</label>
+      <select #sortBySelect id="sortby" class="custom-select" style="width: 175px" (change)="filterAndSortOnChange()">
+        <option selected value="">Default</option>
+        <option value="priceAsc">Price low to high</option>
+        <option value="priceDesc">Price high to low</option>
+      </select>
+    </div>
+
+    <div class="form-inline">
+      <input #searchInput style="width: 80%; border-top-right-radius: 0%; border-bottom-right-radius: 0%;"
+        class="form-control" type="search" placeholder="Search..." (keyup.enter)="search()">
+      <button class="btn btn-light" style="border-top-left-radius: 0%; border-bottom-left-radius: 0%;"
+        (click)="search()">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="mt-4" *ngIf="authService.currentUser?.userRole == 'ADMIN'">
+    <a class="text-primary" style="margin-left: 25px; cursor: pointer; text-decoration: underline; font-size: large"
+      (click)="createProductModal()">
+      Create new product
+    </a>
+  </div>
+
+  <!-- product grid -->
+  <div class="product-grid">
+    <div class="card product-item" *ngFor="let product of productsPerPage">
+      <img [src]="'data:image/png;base64,' + product.images[0]" class="card-img-top click-item"
+        (click)="goProductDetail(product.productId)">
+      <div class="card-body bg-light">
+        <h5 class="card-title">{{product.shortName}}</h5>
+        <p class="card-subtitle mb-2 text-muted">{{product.fullName}}</p>
+        <p class="card-text">{{product.price | currency}}</p>
+        <button class="btn btn-primary" (click)="addToShoppingCart(product)"
+          *ngIf="authService.currentUser?.userRole != 'ADMIN'">Add to cart</button>
+      </div>
+    </div>
+  </div>
+  <mat-paginator *ngIf="productToDisplay.length != 0" [length]="productToDisplay.length" [pageSize]="productPageSize" (page)="paginationNav($event)">
+  </mat-paginator>
+</div>

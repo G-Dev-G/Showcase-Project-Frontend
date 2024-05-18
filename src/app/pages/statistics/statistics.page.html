@@ -1,0 +1,26 @@
+<div style="margin: 30px;">
+  <h3>Statistics</h3>
+  <hr />
+
+  <div class="mt-5 mb-3">
+    <select #categorySelect class="custom-select" style="margin-left: 25px; width: 150px" (change)="filterOnChange()">
+      <option selected value="">All</option>
+      <option value="computers">Computers</option>
+      <option value="tablets">Tablets</option>
+      <option value="phones">Phones</option>
+      <option value="accessories">Accessories</option>
+    </select>
+
+    <select #dateRangeSelect class="custom-select" style="margin-left: 25px; width: 150px" (change)="filterOnChange()">
+      <option selected [value]="30">Recent 30 days</option>
+      <option [value]="90">Recent 90 days</option>
+    </select>
+  </div>
+
+  <div class="chart">
+    <ngx-charts-bar-vertical #chart [view]="[1000, 400]" [xAxis]="true" [yAxis]="true" [legend]="true"
+      legendTitle="Product" [showXAxisLabel]="true" [showYAxisLabel]="true" xAxisLabel="Top 10 Products Ordered"
+      yAxisLabel="Order Qty" [results]="chartData">
+    </ngx-charts-bar-vertical>
+  </div>
+</div>

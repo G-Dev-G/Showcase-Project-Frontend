@@ -1,0 +1,249 @@
+<div class="modal-header">
+  <h5 class="modal-title">Order Status Update</h5>
+  <button type="button" class="close" (click)="activeModal.dismiss()">
+    <span>&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <!-- USER display -->
+  <div class="accordion" id="userAccordion" *ngIf="authService.currentUser?.userRole == 'USER'">
+    <!-- CONFIRMED -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="mb-0">
+          <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+            data-target="#collapseConfirmed" matBadgePosition="before" [matBadge]="confirmedCount" matBadgeColor="warn"
+            [matBadgeHidden]="confirmedCount == 0" [disabled]="confirmedCount == 0">
+            Orders Confirmed
+          </button>
+        </h2>
+      </div>
+      <div id="collapseConfirmed" class="collapse" data-parent="#userAccordion">
+        <div class="card-body">
+          <ul class="list-group list-group-flush" *ngFor="let order of orders">
+            <li class="list-group-item border-bottom"
+              *ngIf="order.status == 'CONFIRMED' && order.status != order.statusCheckedByUserLastTime">
+              <p class="mb-2 float-right">Status: {{order.status}}</p>
+              <p class="mb-2">Order Date: {{order.orderDate}}</p>
+              <p class="mb-2">Ordered Product(s): </p>
+              <table class="table table-striped" style="width: auto">
+                <thead>
+                  <tr>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Short Name</th>
+                    <th scope="col">Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.orderItemDtoList">
+                    <th scope="row">{{item.productDto?.productId}}</th>
+                    <td>{{item.productDto?.shortName}}</td>
+                    <td style="text-align: center;">{{item.quantity}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="float-right">
+                <button type="button" class="btn btn-outline-primary mr-3"
+                  (click)="updateOrderStatusAsUser(order.orderId, 'COMPLETED')">Complete</button>
+                <button type="button" class="btn btn-outline-danger"
+                  (click)="updateOrderStatusAsUser(order.orderId, 'RETURNED')">Return</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CANCELLED -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="mb-0">
+          <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+            data-target="#collapseCancelled" matBadgePosition="before" [matBadge]="cancelledCount" matBadgeColor="warn"
+            [matBadgeHidden]="cancelledCount == 0" [disabled]="cancelledCount == 0">
+            Orders Cancelled
+          </button>
+        </h2>
+      </div>
+      <div id="collapseCancelled" class="collapse" data-parent="#userAccordion">
+        <div class="card-body">
+          <ul class="list-group list-group-flush" *ngFor="let order of orders">
+            <li class="list-group-item border-bottom"
+              *ngIf="order.status == 'CANCELLED' && order.status != order.statusCheckedByUserLastTime">
+              <p class="mb-2 float-right">Status: {{order.status}}</p>
+              <p class="mb-2">Order Date: {{order.orderDate}}</p>
+              <p class="mb-2">Ordered Product(s): </p>
+              <table class="table table-striped" style="width: auto">
+                <thead>
+                  <tr>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Short Name</th>
+                    <th scope="col">Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.orderItemDtoList">
+                    <th scope="row">{{item.productDto?.productId}}</th>
+                    <td>{{item.productDto?.shortName}}</td>
+                    <td style="text-align: center;">{{item.quantity}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="float-right">
+                <button type="button" class="btn btn-outline-primary"
+                  (click)="updateOrderStatusAsUser(order.orderId, 'CANCELLED')">Mark as read</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN display -->
+  <div class="accordion" id="adminAccordion" *ngIf="authService.currentUser?.userRole == 'ADMIN'">
+    <!-- PENDING -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="mb-0">
+          <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+            data-target="#collapsePending" matBadgePosition="before" [matBadge]="pendingCount" matBadgeColor="warn"
+            [matBadgeHidden]="pendingCount == 0" [disabled]="pendingCount == 0">
+            Orders Pending
+          </button>
+        </h2>
+      </div>
+      <div id="collapsePending" class="collapse" data-parent="#adminAccordion">
+        <div class="card-body">
+          <ul class="list-group list-group-flush" *ngFor="let order of orders">
+            <li class="list-group-item border-bottom"
+              *ngIf="order.status == 'PENDING' && order.status != order.statusCheckedByAdminLastTime">
+              <p class="mb-2 float-right">Status: {{order.status}}</p>
+              <p class="mb-2">User Email: {{order.userDto.usernameEmail}}</p>
+              <p class="mb-2">Address: {{order.address}}</p>
+              <p class="mb-2">Order Date: {{order.orderDate}}</p>
+              <p class="mb-2">Ordered Product(s): </p>
+              <table class="table table-striped" style="width: auto">
+                <thead>
+                  <tr>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Short Name</th>
+                    <th scope="col">Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.orderItemDtoList">
+                    <th scope="row">{{item.productDto?.productId}}</th>
+                    <td>{{item.productDto?.shortName}}</td>
+                    <td style="text-align: center;">{{item.quantity}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="float-right">
+                <button type="button" class="btn btn-outline-primary mr-3"
+                  (click)="updateOrderStatusAsAdmin(order.orderId, 'CONFIRMED')">Confirm</button>
+                <button type="button" class="btn btn-outline-danger"
+                  (click)="updateOrderStatusAsAdmin(order.orderId, 'CANCELLED')">Cancel</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPLETED -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="mb-0">
+          <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+            data-target="#collapseCompleted" matBadgePosition="before" [matBadge]="completedCount" matBadgeColor="warn"
+            [matBadgeHidden]="completedCount == 0" [disabled]="completedCount == 0">
+            Orders Completed
+          </button>
+        </h2>
+      </div>
+      <div id="collapseCompleted" class="collapse" data-parent="#adminAccordion">
+        <div class="card-body">
+          <ul class="list-group list-group-flush" *ngFor="let order of orders">
+            <li class="list-group-item border-bottom"
+              *ngIf="order.status == 'COMPLETED' && order.status != order.statusCheckedByAdminLastTime">
+              <p class="mb-2 float-right">Status: {{order.status}}</p>
+              <p class="mb-2">User Email: {{order.userDto.usernameEmail}}</p>
+              <p class="mb-2">Address: {{order.address}}</p>
+              <p class="mb-2">Order Date: {{order.orderDate}}</p>
+              <p class="mb-2">Ordered Product(s): </p>
+              <table class="table table-striped" style="width: auto">
+                <thead>
+                  <tr>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Short Name</th>
+                    <th scope="col">Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.orderItemDtoList">
+                    <th scope="row">{{item.productDto?.productId}}</th>
+                    <td>{{item.productDto?.shortName}}</td>
+                    <td style="text-align: center;">{{item.quantity}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="float-right">
+                <button type="button" class="btn btn-outline-primary"
+                  (click)="updateOrderStatusAsAdmin(order.orderId, 'COMPLETED')">Mark as read</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- RETURNED -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="mb-0">
+          <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+            data-target="#collapseReturned" matBadgePosition="before" [matBadge]="returnedCount" matBadgeColor="warn"
+            [matBadgeHidden]="returnedCount == 0" [disabled]="returnedCount == 0">
+            Orders Returned
+          </button>
+        </h2>
+      </div>
+      <div id="collapseReturned" class="collapse" data-parent="#adminAccordion">
+        <div class="card-body">
+          <ul class="list-group list-group-flush" *ngFor="let order of orders">
+            <li class="list-group-item border-bottom"
+              *ngIf="order.status == 'RETURNED' && order.status != order.statusCheckedByAdminLastTime">
+              <p class="mb-2 float-right">Status: {{order.status}}</p>
+              <p class="mb-2">User Email: {{order.userDto.usernameEmail}}</p>
+              <p class="mb-2">Address: {{order.address}}</p>
+              <p class="mb-2">Order Date: {{order.orderDate}}</p>
+              <p class="mb-2">Ordered Product(s): </p>
+              <table class="table table-striped" style="width: auto">
+                <thead>
+                  <tr>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Short Name</th>
+                    <th scope="col">Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.orderItemDtoList">
+                    <th scope="row">{{item.productDto?.productId}}</th>
+                    <td>{{item.productDto?.shortName}}</td>
+                    <td style="text-align: center;">{{item.quantity}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="float-right">
+                <button type="button" class="btn btn-outline-primary"
+                  (click)="updateOrderStatusAsAdmin(order.orderId, 'RETURNED')">Mark as read</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

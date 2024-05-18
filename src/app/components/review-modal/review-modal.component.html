@@ -1,0 +1,49 @@
+<div class="modal-header">
+  <h5 class="modal-title">Review</h5>
+  <button type="button" class="close" (click)="activeModal.dismiss()">
+    <span>&times;</span>
+  </button>
+</div>
+
+<div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+  <form [formGroup]="reviewForm" class="mx-3">
+    <ul class="list-unstyled">
+      <li class="media mb-2" *ngFor="let orderItem of orderDto.orderItemDtoList; index as i">
+        <img class="border mr-3" style="width: 120px;"
+          [src]="'data:image/png;base64,' + orderItem.productDto?.images[0]" />
+        <div class="media-body">
+          <h6>{{orderItem.productDto?.fullName}}</h6>
+
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <ngb-rating [max]="5" [formControlName]="'rating' + i">
+                    <ng-template let-fill="fill">
+                      <span class="star" [class.filled]="fill === 100">&#9733;</span>
+                    </ng-template>
+                  </ngb-rating>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <textarea class="form-control" placeholder="Leave your comment here."
+                [formControlName]="'comment' + i"></textarea>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </li>
+    </ul>
+
+    <div *ngIf="!hasValidRatingControl() && reviewForm.touched">
+      <ul class="pl-3">
+        <li class="text-danger">Rating is required.</li>
+      </ul>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button *ngIf="!hasReview" class="btn btn-success btn-block" (click)="setReview()"
+    [disabled]="!hasValidRatingControl()">Post</button>
+  <button *ngIf="hasReview" class="btn btn-success btn-block" (click)="setReview()"
+    [disabled]="!hasValidRatingControl()">Update</button>
+</div>

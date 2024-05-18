@@ -1,0 +1,124 @@
+<a (click)="navBack()" class="btn btn-primary mt-3 ml-3">Back</a>
+<div style="margin: 30px;">
+  <div style="display: flex; justify-content: space-between;">
+    <h3>{{product.shortName}}</h3>
+    <div *ngIf="authService.currentUser?.userRole == 'ADMIN'">
+      <a class="text-success mr-3" style="cursor: pointer; text-decoration: underline; font-size: large"
+        (click)="editProductModal()">
+        Edit
+      </a>
+      <a class="text-danger mr-5" style="cursor: pointer; text-decoration: underline; font-size: large"
+        (click)="deleteProduct()">
+        Delete
+      </a>
+    </div>
+  </div>
+  <hr />
+
+  <section class="my-5">
+    <div class="row">
+      <div class="col-md-6 col-xl-5 mb-3">
+        <div style="max-width: 720px;">
+          <app-carousel [images]="productImageUrls"></app-carousel>
+        </div>
+      </div>
+      <div class="col-md-6 col-xl-7">
+        <div style="display: flex; width: 300px; justify-content: space-between;">
+          <h5 style="margin-right: 30px">{{product.fullName}}</h5>
+          <button mat-icon-button class="favorite-btn" (click)="toggleFavorite()"
+            *ngIf="authService.currentUser?.userRole != 'ADMIN'">
+            <i [class]="isUserFavorite ? 'fa fa-heart' : 'fa fa-heart-o'"></i>
+          </button>
+        </div>
+        <p class="mb-2 text-muted text-uppercase small">{{product.category}}</p>
+        <div class='rating'>
+          <ngb-rating [rate]="overallRating" [max]="5" [readonly]="true">
+            <ng-template let-fill="fill">
+              <span class="star" [class.filled]="fill === 100">
+                <span class="half" [style.width.%]="fill">&#9733;</span>
+                &#9733;
+              </span>
+            </ng-template>
+          </ngb-rating>
+        </div>
+        <p class="my-2"><strong>{{product.price | currency}}</strong></p>
+        <hr />
+        <div *ngIf="authService.currentUser?.userRole != 'ADMIN'">
+          <div class="mb-3">
+            <p>Quantity</p>
+            <div class="input-group" style="width: 120px">
+              <span class="input-group-prepend">
+                <button class="btn btn-outline-secondary btn-number" (click)="reduceQuantity()">
+                  <span class="fa fa-minus"></span>
+                </button>
+              </span>
+              <input type="text" class="form-control input-number" [(ngModel)]="productQuantity" disabled>
+              <span class="input-group-append">
+                <button class="btn btn-outline-secondary btn-number" (click)="addQuantity()">
+                  <span class="fa fa-plus"></span>
+                </button>
+              </span>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-md mr-1 mb-2" (click)="orderProduct()">Order now</button>
+          <button class="btn btn-light btn-md mr-1 mb-2" (click)="addToShoppingCart()">
+            <i class="fa fa-shopping-cart"></i> Add to cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- nav tabs section -->
+  <div class="pt-1">
+    <ul class="nav nav-tabs nav-justified">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#description">Description</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#reviews">Reviews ({{reviews.length}})</a>
+      </li>
+    </ul>
+    <div class="tab-content pt-2">
+      <div class="tab-pane active" id="description">
+        <h5>Product Description</h5>
+        <div class="pt-1" id="descriptionContent">
+        </div>
+      </div>
+
+      <div class="tab-pane" id="reviews">
+        <h5><span>{{reviews.length}}</span> review(s)</h5>
+        <div *ngFor="let review of reviewsPerPage">
+          <div class="media my-3">
+            <div class="media-body">
+              <div class="d-md-flex justify-content-between">
+                <div>
+                  <strong>{{review.userName[0]}}*****</strong>
+                  <span> – {{review.reviewDate | date}}</span>
+
+                  <span class="ml-3" *ngIf="authService.currentUser?.userRole != 'ADMIN'">
+                    <button mat-icon-button class="flag-review-btn" (click)="toggleReviewFlag(review.reviewId)">
+                      <i [class]="isFlaggedByUser(review.reviewId) ? 'fa fa-thumbs-up' : 'fa fa-thumbs-o-up'"></i>
+                    </button>
+                    <span style="color: #ffa500;">{{review.flaggedCount}}</span>
+                  </span>
+                </div>
+                <div class='review-rating'>
+                  <ngb-rating [rate]="review.rating" [max]="5" [readonly]="true">
+                    <ng-template let-fill="fill">
+                      <span class="star" [class.filled]="fill === 100">&#9733;</span>
+                    </ng-template>
+                  </ngb-rating>
+                </div>
+              </div>
+              <p class="mt-1 mb-0">{{review.comment}}</p>
+            </div>
+          </div>
+          <hr />
+        </div>
+        <mat-paginator *ngIf="reviews.length != 0" [length]="reviews.length" [pageSize]="reviewPageSize" (page)="paginationNav($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

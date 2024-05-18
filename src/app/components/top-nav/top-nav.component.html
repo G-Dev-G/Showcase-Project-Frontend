@@ -1,0 +1,22 @@
+<nav class="navbar navbar-light bg-light">
+  <div class="btn-group float-right ml-auto" *ngIf="authService.currentUser == null">
+    <button [class]="router.url == '/login' ? 'btn btn-secondary active' : 'btn btn-secondary'" routerLink="/login">Login</button>
+    <button [class]="router.url == '/register' ? 'btn btn-secondary active' : 'btn btn-secondary'" routerLink="/register">Register</button>
+  </div>
+
+  <div class="btn-group float-right ml-auto" *ngIf="authService.currentUser != null">
+    <button class="mr-3" mat-icon-button [matMenuTriggerFor]="menu">
+      <i class="fa fa-bell" [matBadge]="notificationCount" matBadgeColor="warn" style="font-size: 20px;"></i>
+    </button>
+    <mat-menu #menu="matMenu">
+      <span mat-menu-item (click)="openOrderStatus()" *ngIf="notificationCount != 0">
+        View {{notificationCount}} update(s) of your order.
+      </span>
+      <span mat-menu-item (click)="openOrderStatus()" *ngIf="notificationCount == 0">
+        There is no update for your order.
+      </span>
+    </mat-menu>
+
+    <button class="btn btn-secondary" (click)="logout()">Logout</button>
+  </div>
+</nav>

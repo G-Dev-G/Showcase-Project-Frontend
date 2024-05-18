@@ -1,0 +1,29 @@
+<h5>UPDATE INFO</h5>
+<hr class="mt-0" />
+<form [formGroup]="infoForm" style="width: 90%;" class="mt-5">
+  <div class="d-flex flex-row">
+    <label for="name" class="mr-3" style="width: 50px; margin: auto 0;">Name: </label>
+    <div class="col-5">
+      <input type="text" [class]="getValidationClass('name')" id="name" formControlName='name' />
+      <div class="invalid-feedback">
+        Name is required.
+      </div>
+    </div>
+    <div class="col-1"></div>
+    <label class="mr-3 mt-1">Identity: </label>
+    <div class="mt-1">
+      <h5><span class="badge badge-info">{{this.authService.currentUser?.userRole}}</span></h5>
+    </div>
+  </div>
+
+  <div class="d-flex flex-row mt-4">
+    <label for="address" class="mr-3" style="width: 50px; margin: auto 0;">Address: </label>
+    <div class="col-5">
+      <input type="text" class="form-control" id="address" formControlName='address' />
+    </div>
+  </div>
+
+  <button class="btn btn-outline-danger mt-5" (click)="save()" [disabled]="infoForm.invalid">Save</button>
+  <p *ngIf="errorMsg != ''" class="text-danger mt-3">{{errorMsg}}</p>
+  <p *ngIf="successMsg != ''" class="text-success mt-3">{{successMsg}}</p>
+</form>

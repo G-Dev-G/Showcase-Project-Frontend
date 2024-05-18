@@ -1,0 +1,64 @@
+<div style="height: 100%">
+  <mat-sidenav-container autosize style="height: 100vh;">
+    <!-- Sidebar -->
+    <mat-sidenav #sidebar class="sidebar-container" mode="side" opened="true">
+      <div [class]="isClose ? 'sidebar-close' : 'sidebar-open'">
+        <ul>
+          <li class="sidebar-item" (click)="toggleClick()">
+            <span class="fa fa-chevron-left icon" [hidden]="isClose"></span>
+            <span class="fa fa-chevron-right icon" [hidden]="!isClose"></span>
+            <span class="text" *ngIf="!isClose">Menu</span>
+          </li>
+          <li
+            [class]="router.url == '/products' ? 'sidebar-item active' : 'sidebar-item'" (click)="navTo('products')">
+            <span class="fa fa-home icon"></span>
+            <span class="text" *ngIf="!isClose">Products</span>
+          </li>
+          <li
+            [class]="router.url == '/shopping-cart' ? 'sidebar-item active' : 'sidebar-item'"
+            (click)="navTo('shopping-cart')">
+            <span class="fa fa-shopping-cart icon"></span>
+            <span class="text" *ngIf="!isClose">Shopping cart</span>
+          </li>
+          <li
+            [class]="router.url == '/favorite' ? 'sidebar-item active' : 'sidebar-item'" (click)="navTo('favorite')">
+            <span class="fa fa-heart icon"></span>
+            <span class="text" *ngIf="!isClose">Favorite</span>
+          </li>
+          <li
+            [class]="router.url == '/account' ? 'sidebar-item active' : 'sidebar-item'" (click)="navTo('account')">
+            <span class="fa fa-user icon"></span>
+            <span class="text" *ngIf="!isClose">Account</span>
+          </li>
+          <li
+            [class]="router.url == '/statistics' ? 'sidebar-item active' : 'sidebar-item'"
+            (click)="navTo('statistics')">
+            <span class="fa fa-bar-chart icon"></span>
+            <span class="text" *ngIf="!isClose">Statistics</span>
+          </li>
+          <li
+            [class]="router.url == '/about' ? 'sidebar-item active' : 'sidebar-item'" (click)="navTo('about')">
+            <span class="fa fa-tachometer icon" aria-hidden="true"></span>
+            <span class="text" *ngIf="!isClose">About</span>
+          </li>
+        </ul>
+      </div>
+    </mat-sidenav>
+
+    <!-- page container -->
+    <mat-sidenav-content>
+      <p style="text-align:center; margin: 5px auto;">
+        <b>ABOUT: </b>This project is deployed for demonstration. Any product listed is used for testing purpose, not for actual sale.<br>
+        For Testing - Login - User: <i>testing@user</i>, password: <i>useruser1</i>. Admin: <i>testing@admin</i>, password: <i>adminadmin1</i>.<br>
+        &copy; Gelan Xue<br>
+      </p>
+      <app-top-nav [orders]="orders" [notificationCount]="notificationCount"
+        (statusUpdatedEvent)="retrieveOrdersAndStatusUpdate()"></app-top-nav>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+  <!-- Ngx spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.1)" size="medium" color="#000000" type="ball-spin" [fullScreen]="true">
+  </ngx-spinner>
+</div>

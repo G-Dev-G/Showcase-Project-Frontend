@@ -1,0 +1,42 @@
+.rating .star {
+  position: relative;
+  display: inline-block;
+  color: #ffe4b3;
+  font-size: 25px;
+}
+.rating .filled {
+  color: #ffa500;
+}
+.rating .half {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #ffa500;
+}
+
+.input-number {
+  background-color: transparent;
+}
+
+.review-rating .star {
+  color: #ffe4b3;
+  font-size: 18px;
+}
+.review-rating .filled {
+  color: #ffa500;
+}
+
+.favorite-btn {
+  color: lightcoral;
+  font-size: 30px;
+}
+
+.flag-review-btn {
+  color: #ffa500;
+  font-size: 19px;
+}
+
+.nav-link {
+  color: darkgray;
+  font-weight: 600;
+}

@@ -1,0 +1,90 @@
+<div class="modal-header">
+  <h5 class="modal-title" *ngIf="productDto == null">Create new product</h5>
+  <h5 class="modal-title" *ngIf="productDto != null">Edit {{productDto?.shortName}}</h5>
+  <button type="button" class="close" (click)="activeModal.dismiss()">
+    <span>&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="productForm" class="mx-3">
+    <div class="form-group row">
+      <label for="shortName" class="col-sm-4 col-form-label">Short name:</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" id="shortName" formControlName='shortName' required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="fullName" class="col-sm-4 col-form-label">Full name:</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" id="fullName" formControlName='fullName' required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="description" class="col-sm-4 col-form-label">Description:</label>
+      <div class="col-sm-7">
+        <textarea class="form-control" id="description" formControlName='description' required></textarea>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="price" class="col-sm-4 col-form-label">Price:</label>
+      <div class="input-group col-sm-4">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
+        <input type="number" class="form-control" id="price" formControlName='price' required
+          (keyup)="priceToPrecision($event)">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="category" class="col-sm-4 col-form-label">Category:</label>
+      <div class="col-sm-4">
+        <select id="category" class="custom-select" formControlName='category' required>
+          <option value="computers">Computers</option>
+          <option value="tablets">Tablets</option>
+          <option value="phones">Phones</option>
+          <option value="accessories">Accessories</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="image" class="col-sm-4 col-form-label">Images:</label>
+      <div class="custom-file col-sm-7 mx-3">
+        <input type="file" class="custom-file-input" id="image" accept="image/*" required multiple
+          (change)="addImgFile($event)">
+        <label class="custom-file-label" for="image">Choose file...</label>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-7 d-flex">
+        <div class="card" style="width: 120px;" *ngFor="let img of previewImgsToDisplay; index as i">
+          <img [src]="img" class="card-img-top">
+          <button type="button" class="btn btn-light btn-block btn-sm" (click)="removeImgByIndex(i)">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-text small" *ngIf="submitFlag">
+      <ul class="pl-3">
+        <li *ngIf="productForm.get('shortName').invalid" class="text-danger">Short name is required.</li>
+        <li *ngIf="productForm.get('fullName').invalid" class="text-danger">full name is required.</li>
+        <li *ngIf="productForm.get('description').invalid" class="text-danger">Description is required.</li>
+        <li *ngIf="productForm.get('price').invalid" class="text-danger">Price is required.</li>
+        <li *ngIf="productForm.get('category').invalid" class="text-danger">Category is required.</li>
+        <li *ngIf="addedImgsBytes.length == 0" class="text-danger">Please upload at least one image.</li>
+        <li *ngIf="addedImgsBytes.length > 5" class="text-danger">Please upload no more than five images.</li>
+      </ul>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-outline-success" (click)="saveProduct()">Save</button>
+</div>

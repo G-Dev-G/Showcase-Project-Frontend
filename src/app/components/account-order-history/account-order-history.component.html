@@ -1,0 +1,66 @@
+<table mat-table [dataSource]="dataSource" matSort class="my-2" style="width: 100%;">
+  <ng-container matColumnDef="orderId">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Order ID</th>
+    <td mat-cell *matCellDef="let order">{{order.orderId}}</td>
+  </ng-container>
+  <ng-container matColumnDef="usernameEmail">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>User Email</th>
+    <td mat-cell *matCellDef="let order">{{order.userDto?.usernameEmail}}</td>
+  </ng-container>
+  <ng-container matColumnDef="productImgs">
+    <th mat-header-cell *matHeaderCellDef>Products</th>
+    <td mat-cell *matCellDef="let order">
+      <div class="product-img-container">
+        <div *ngFor="let orderItem of order.orderItemDtoList; index as i">
+          <img *ngIf="i <= 2" class="product-img" [src]="'data:image/png;base64,' + orderItem.productDto?.images[0]" />
+        </div>
+        <button mat-mini-fab color="warn" style="margin: auto 0" *ngIf="order.orderItemDtoList.length > 3">
+          <i class="fa fa-ellipsis-h"></i>
+        </button>
+      </div>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
+    <td mat-cell *matCellDef="let order">{{getOrderPrice(order) | currency}}</td>
+  </ng-container>
+  <ng-container matColumnDef="orderDate">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Order Date</th>
+    <td mat-cell *matCellDef="let order">{{order.orderDate | date}}</td>
+  </ng-container>
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+    <td mat-cell *matCellDef="let order">{{order.status}}</td>
+  </ng-container>
+  <ng-container matColumnDef="review">
+    <th mat-header-cell *matHeaderCellDef>Review</th>
+    <td mat-cell *matCellDef="let order">
+      <span *ngIf="order.status != 'COMPLETED'; else statusCompletedBlock">N/A</span>
+      <ng-template #statusCompletedBlock>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="openReviewModal($event, order)"
+          *ngIf="hasReview(order) == -1">
+          Post Review
+        </button>
+        <button type="button" class="btn btn-outline-info btn-sm" (click)="openReviewModal($event, order)"
+          *ngIf="hasReview(order) == 0">
+          Continue Review
+        </button>
+        <button type="button" class="btn btn-outline-success btn-sm" (click)="openReviewModal($event, order)"
+          *ngIf="hasReview(order) == 1">
+          View Review
+        </button>
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <div *ngIf="authService.currentUser?.userRole == 'USER'">
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayForUser"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplayForUser" class="mat-row" (click)="openOrderDetail(row)"></tr>
+  </div>
+
+  <div *ngIf="authService.currentUser?.userRole == 'ADMIN'">
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayForAdmin"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplayForAdmin" class="mat-row" (click)="openOrderDetail(row)"></tr>
+  </div>
+</table>
+<mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>

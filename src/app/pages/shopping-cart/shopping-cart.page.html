@@ -1,0 +1,89 @@
+<div style="margin: 30px;">
+  <h3>SHOPPING CART</h3>
+  <hr class="mb-5" />
+
+  <div *ngIf="shoppingCartItems.length != 0" class="mb-2" style="max-width: 1300px;">
+    <div style="display: flex; width: 72%; justify-content: space-between;">
+    <button class="btn btn-primary btn-sm" (click)="selectAllItems()" *ngIf="hasNoCheckedItem()">Select All</button>
+    <button class="btn btn-primary btn-sm" (click)="deselectAllItems()" *ngIf="!hasNoCheckedItem()">Deselect All</button>
+    <button class="btn btn-danger btn-sm" (click)="deleteAllItems()">Delete All</button>
+  </div>
+  </div>
+  <div style="display: flex; max-width: 1300px;">
+    <div class="card" style="width: 72%; margin-right: 1%;">
+      <div class="card-body">
+        <div *ngIf="shoppingCartItems.length == 0" class="mt-4">
+          <h5 style="text-align: center;">Your cart is empty. <a routerLink="/products">Go shopping!</a></h5>
+        </div>
+
+        <table class="table table-borderless table-hover" *ngIf="shoppingCartItems.length != 0">
+          <tbody>
+            <tr style="border-bottom: 0.5px solid lightgrey;" *ngFor="let item of shoppingCartItems">
+              <td style="width: 50px; vertical-align: middle;">
+                <input style="width: 20px; height: 20px" type="checkbox" [(ngModel)]="item.checked"
+                  (change)="updateShoppingCart(item)" />
+              </td>
+              <td>
+                <div class="media">
+                  <img class="border mr-4" style="width: 220px; cursor: pointer;"
+                    [src]="'data:image/png;base64,' + item.productDto?.images[0]" (click)="navToProductDetail(item.productDto?.productId)" />
+                  <div class="media-body">
+                    <h5 class="mt-0">{{item.productDto?.price * item.quantity | currency}}</h5>
+                    <p class="full-name" (click)="navToProductDetail(item.productDto?.productId)">{{item.productDto?.fullName}}</p>
+                    <div class="input-group input-group-sm" style="width: 100px;">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" style="font-weight: 500;">Qty</span>
+                      </div>
+                      <input type="number" class="form-control" min="1" max="10" [(ngModel)]="item.quantity"
+                        (input)="limitQuantity(item, $event)" (keyup)="roundQuantity(item, $event)"
+                        (change)="updateShoppingCart(item)" />
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td style="width: 50px;">
+                <span class="fa fa-times" style="color: grey; font-size: 22px; cursor: pointer; float: right;"
+                  (click)="deleteShoppingCart(item.shoppingCartId)"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="width: 27%; height: fit-content;">
+      <table class="table table-borderless" style="width: 95%; margin: 0 auto;">
+        <thead>
+          <tr style="border-bottom: 0.5px solid lightgrey;">
+            <th>SUMMARY</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="display: flex; justify-content: space-between;">
+              <a>SUB-TOTAL</a>
+              <a>{{calculateSubTotal() | currency}}</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="display: flex; justify-content: space-between; padding-top: 0;">
+              <a>TAX</a>
+              <a>{{calculateSubTotal() * 0.13 | currency}}</a>
+            </td>
+          </tr>
+          <tr style="border-top: 0.5px solid lightgrey;">
+            <th style="display: flex; justify-content: space-between; font-size: large;">
+              <p>TOTAL</p>
+              <p>{{calculateSubTotal() * 1.13 | currency}}</p>
+            </th>
+          </tr>
+          <tr>
+            <th><button class="btn btn-success btn-block" (click)="checkout()"
+                [disabled]="shoppingCartItems.length == 0 || hasNoCheckedItem()">CHECKOUT</button></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

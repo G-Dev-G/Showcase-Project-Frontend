@@ -1,0 +1,52 @@
+.sidebar-container {
+  background-color: #4d4d4d;
+}
+
+.sidebar-container ul {
+  padding: 0;
+}
+
+.sidebar-container li {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  list-style-type: none;
+  cursor: pointer;
+}
+
+.sidebar-container li:hover span {
+  color: white;
+}
+
+.sidebar-close li {
+  padding: 10px 20px !important;
+}
+
+.sidebar-open li {
+  padding-left: 15px;
+  padding-right: 15px;
+  color: #c0c2c5;
+}
+
+.sidebar-open .icon {
+  margin-right: 15px;
+}
+
+.sidebar-open span.text {
+  vertical-align: middle;
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+span.icon {
+  vertical-align: middle;
+  color: #c0c2c5;
+  font-size: 35px;
+  width: 35px;
+  text-align: center;
+}
+
+.sidebar-container .active {
+  background-color: gray;
+}
+

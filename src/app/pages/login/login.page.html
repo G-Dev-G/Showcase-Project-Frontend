@@ -1,0 +1,44 @@
+<div style="margin: 30px;">
+  <h3>LOGIN</h3>
+  <hr />
+
+  <div class="card bg-light my-5" style="width: 700px; margin: auto auto;">
+    <div class="card-body">
+      <form [formGroup]="loginForm" class="my-2">
+        <div class="form-group row">
+          <label for="email" class="col-3 col-form-label">Email</label>
+          <div class="col-7">
+            <input type="text" [class]="getValidationClass('email')" id="email" formControlName='email'>
+            <div class="invalid-feedback"
+              *ngIf="loginForm.get('email').touched && loginForm.get('email').errors?.required; else emailValidator">
+              Email is required.
+            </div>
+            <ng-template #emailValidator>
+              <div class="invalid-feedback"
+                *ngIf="loginForm.get('email').touched && loginForm.get('email').errors?.email">
+                Enter a valid email address.
+              </div>
+            </ng-template>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="password" class="col-3 col-form-label">Password</label>
+          <div class="col-7">
+            <input type="password" [class]="getValidationClass('password')" id="password" formControlName='password'>
+            <div class="invalid-feedback">
+              Password is required.
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary mt-2" (click)="login()">Login</button>
+        <a (click)="openForgotPasswordModal()" class="text-primary mt-4" style="cursor: pointer; float: right;">Forgot your password?</a>
+        <div class="col-7 mt-3 alert alert-danger" role="alert" *ngIf="accountNotFound">
+          Account is not found, please verify your email or password.
+        </div>
+      </form>
+    </div>
+    <div class="card-footer">
+      New to the site? <a routerLink="/register">Register an account!</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.product-item {
+  width: 290px;
+  min-height: 290px;
+  margin: 25px;
+}
+
+.click-item {
+  cursor: pointer;
+}

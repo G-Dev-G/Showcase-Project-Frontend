@@ -1,0 +1,27 @@
+.about-section {
+  padding-top: 8%;
+  height: 90vh;
+}
+
+.main-container {
+  width: 800px;
+  margin: auto auto;
+}
+
+td {
+  padding-left: 50px;
+  padding-right: 50px;
+  text-align: center;
+  width: 50%;
+}
+
+.left-container {
+  border-right: 1px solid black;
+}
+
+.footer {
+  position: absolute;
+  width:100%;
+  text-align: center;
+  bottom: 10px;
+}

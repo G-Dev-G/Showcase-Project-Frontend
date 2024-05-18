@@ -1,0 +1,34 @@
+.mat-column-orderId {
+  width: 100px;
+}
+
+.mat-column-usernameEmail {
+  max-width: 200px;
+}
+
+.mat-column-productImgs, .mat-column-review {
+  text-align: center;
+}
+
+.product-img-container {
+  display: flex;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.product-img {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  margin-right: 2px;
+}
+
+
+.mat-row {
+  height: 75px;
+}
+
+.mat-row:hover {
+  cursor: pointer;
+  background-color: #e6e6e6;
+}
