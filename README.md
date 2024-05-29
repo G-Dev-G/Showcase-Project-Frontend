@@ -18,6 +18,7 @@ UI & Styling: Bootstrap, Angular Powered Bootstrap, Angular Material, Sweetalert
 ## Functionality
 
 | Functionality | Guest | User | Admin |
+| ------------- | ----- | ---- | ----- |
 | User authentication | Y | Y | Y |
 | Email verification | Y | Y | Y |
 | View product page | Y | Y | Y |
