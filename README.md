@@ -12,7 +12,7 @@ The new version repo for showcasing the project frontend
 
 ## Development Stack
 
-Framework: Angular framework - Typescript, HTML & SCSS
+Framework: Angular framework - Typescript, HTML & SCSS<br />
 UI & Styling: Bootstrap, Angular Powered Bootstrap, Angular Material, Sweetalert2, ngx-spinner, ngx-charts, Font awesome icon library
 
 ## Functionality
