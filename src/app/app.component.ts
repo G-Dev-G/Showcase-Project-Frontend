@@ -24,15 +24,25 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    // auto login as user to make the testing easier
-    await this.authService.login('testing@user', 'useruser1');
-
     // check if user exists in session
     if (sessionStorage.getItem('userId')) {
       // retrieve user from db
       await this.authService.getUserById(parseInt(sessionStorage.getItem('userId'), 10));
     }
     await this.retrieveOrdersAndStatusUpdate();
+  }
+
+  public async loginTesting(role: string): Promise<void> {
+    // instant login to make the testing easier
+    // logout first if already logged in
+    if (this.authService.currentUser != null)
+      await this.authService.logout(true);
+    // user
+    if (role == ROLE_USER)
+      await this.authService.login('testing@user', 'useruser1');
+    // admin
+    if (role == ROLE_ADMIN)
+      await this.authService.login('testing@admin', 'adminadmin1');
   }
 
   public async retrieveOrdersAndStatusUpdate(): Promise<void> {

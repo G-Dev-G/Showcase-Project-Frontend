@@ -102,7 +102,7 @@ export class AuthenticationService {
   /**
    * logout request
    */
-  public async logout(): Promise<void> {
+  public async logout(noRefresh?: boolean): Promise<void> {
     console.log(sessionStorage.getItem('token'));
     this.spinner.show(); // loader
     let response: Map<String, String> = null;
@@ -121,7 +121,8 @@ export class AuthenticationService {
       sessionStorage.removeItem('token'); // remove token
       sessionStorage.removeItem('userId'); // remove user id
       this.currentUserSubject.next(null); // remove userDto
-      location.href = "/products"; // refresh
+      if (!noRefresh)
+        location.href = "/products"; // refresh
     }
     else
       await this.alertService.generateHttpError(response['msg']);
