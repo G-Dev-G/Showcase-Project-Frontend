@@ -24,6 +24,9 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    // auto login as user to make the testing easier
+    await this.authService.login('testing@user', 'useruser1');
+
     // check if user exists in session
     if (sessionStorage.getItem('userId')) {
       // retrieve user from db
