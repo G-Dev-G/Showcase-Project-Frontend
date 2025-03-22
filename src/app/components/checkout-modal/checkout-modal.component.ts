@@ -40,10 +40,6 @@ export class CheckoutModalComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit(): Promise<void> {
-    /////////////////////////// deploy version - Paypal Function disabled ///////////////////////////
-    return;
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-
     // paypal processing
     await paypal.Buttons({
       createOrder: (data, actions) => {
